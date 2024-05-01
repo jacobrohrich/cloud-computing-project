@@ -1,0 +1,57 @@
+body {
+  background: rgb(46,216,218);
+  background: linear-gradient(1000deg, rgba(46,216,218,0.9164040616246498) 0%, rgba(238,237,231,1) 100%);
+  
+  
+}
+
+.App {
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 6px;
+  padding: 5px;
+  margin-bottom: 60px; /* Add margin-bottom to create space between the header border and the links */
+}
+
+.title {
+  margin: auto;
+  text-align: center;
+  border-bottom: 2px solid black;
+  padding-bottom: 5px;
+}
+
+.center-div {
+  margin: auto;
+  width: 90%;
+}
+
+
+h2 {
+  margin: auto;
+  width: 95%;
+  padding: 4px;
+}
+
+form {
+  margin: auto;
+  padding: 10px;
+}
+
+input {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+button {
+  margin-left: auto;
+  margin-right: auto;
+  display: block; /* Make the button a block element to center it */
+  margin-top: 10px; /* Add some space between the button and the form */
+}
