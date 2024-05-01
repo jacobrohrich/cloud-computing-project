@@ -1,9 +1,0 @@
-EC2 INFO:
-public_ipv4	"34.226.203.38"
-public_hostname	"ec2-34-226-203-38.compute-1.amazonaws.com"
-region	"us-east-1"
-instance_id	"i-086811dfc56c350aa"
-domain	"amazonaws.com"
-
-Ec2 login with ssh:
-ssh -i "user1keypair.pem" ec2-user@ec2-34-226-203-38.compute-1.amazonaws.com
