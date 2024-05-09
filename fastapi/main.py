@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import Dict
 import mysql.connector
 import logging
 # Initialize FastAPI app
@@ -17,35 +18,16 @@ app.add_middleware(
 
 # MySQL database configuration
 db_config = {
-    'host': 'bookdatabase.cd20uq62w175.us-east-1.rds.amazonaws.com',  # Replace with your RDS endpoint
+    'host': 'database-1.c5wc60k2qc5t.us-east-1.rds.amazonaws.com',  # Replace with your RDS endpoint
     'user': 'admin',      # Replace with your username
-    'password': '123123123',  # Replace with your password
-    'database': 'bookDATABASE'
+    'password': 'admin123',  # Replace with your password
+    'database': 'books'
 }
 
 # Initialize logger
 logger = logging.getLogger(__name__)
 
-# Function to create database if not exists
-def create_database_if_not_exists(database_name):
-    try:
-        # Connect to MySQL server
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-
-        # Create database if it doesn't exist
-        cursor.execute("CREATE DATABASE database")
-
-        # Commit the transaction
-        conn.commit()
-
-        # Close database connection
-        cursor.close()
-        conn.close()
-
-    except Exception as e:
-        # Log the exception
-        print(f"Failed to create database: {str(e)}")
+# Function to create database if not exist
 
 # Create the database if it doesn't exist
 # create_database_if_not_exists('database')  # Replace 'your_database' with the desired database name
@@ -115,6 +97,7 @@ async def insert_book_details(book: Book):
             INSERT INTO bookTable (Book_Title, Author, Genre, ISBN, Summary, Publisher, PublishedYear, Rate, Reviews)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
+        
         values = (
             book.bookTitle, 
             book.author, 
@@ -139,5 +122,61 @@ async def insert_book_details(book: Book):
     except Exception as e:
         # Log the exception
         logger.error(f"Failed to insert book details: {str(e)}")
+        # Raise HTTPException with 500 status code
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+# Endpoint to search book by title
+@app.post("/api/searchBookByTitle")
+async def search_book_by_title(title_data: Dict[str, str]):
+    try:
+        # Connect to MySQL database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        title = title_data.get('title', '')
+
+        # Search for books by title
+        query = """
+            SELECT * FROM bookTable WHERE LOWER(Book_Title) LIKE LOWER(%s)
+        """
+        cursor.execute(query, (f'%{title}%',))
+
+        # Fetch all results
+        books = cursor.fetchall()
+
+        # Close database connection
+        cursor.close()
+        conn.close()
+
+        return books
+    except Exception as e:
+        # Log the exception
+        logger.error(f"Failed to search books by title: {str(e)}")
+        # Raise HTTPException with 500 status code
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+@app.get("/api/getAllBooks")
+async def get_all_books():
+    try:
+        # Connect to MySQL database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+
+        # Retrieve all books from the database
+        query = """
+            SELECT * FROM bookTable
+        """
+        cursor.execute(query)
+
+        # Fetch all results
+        books = cursor.fetchall()
+
+        # Close database connection
+        cursor.close()
+        conn.close()
+
+        return books
+    except Exception as e:
+        # Log the exception
+        logger.error(f"Failed to retrieve all books: {str(e)}")
         # Raise HTTPException with 500 status code
         raise HTTPException(status_code=500, detail="Internal Server Error")

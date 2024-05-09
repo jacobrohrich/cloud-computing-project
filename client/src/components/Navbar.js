@@ -13,9 +13,6 @@ function Navbar() {
           <Link to="/register">Register</Link>
         </li>
         <li>
-          <Link to="/rate-review">Rate & Review</Link>
-        </li>
-        <li>
           <Link to="/reading-list">Reading List</Link>
         </li>
       </ul>
