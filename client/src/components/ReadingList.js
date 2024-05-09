@@ -21,8 +21,8 @@ function ReadingList() {
 
   return (
     <div className="center-div">
-      <h2>Click the button to display your reading list:</h2>
-      <button type="button" onClick={handleDisplayReadingList}>Display Reading List</button>
+      <h2>Click below to display all the Books currently in the Databse:</h2>
+      <button type="button" onClick={handleDisplayReadingList}>Display Book Lists</button>
       <div>
         <h4>Reading List:</h4>
         <ul>
